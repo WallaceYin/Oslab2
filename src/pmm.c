@@ -35,18 +35,18 @@ static void *pmm_alloc(size_t size) {
 			d += 1;
 		}
 		return d;
-	}
+	};
 
 	size_t align(int digit) {
 		return 1 << (d - 1);
-	}
+	};
 
 	if (size == 0)
 		return NULL;
 	if (block == NULL)
 	{
 		void *p = current;
-		while (p % align(digit(size + BLOCK_SIZE)) != 0) p++;
+		while (((size_t)p) % align(digit(size + BLOCK_SIZE)) != 0) p++;
 		current = p + align(digit(size + BLOCK_SIZE));
 		block = (struct _Block *)p + size;
 		block->size = align(digit(size + BLOCK_SIZE)) - BLOCK_SIZE;
@@ -67,7 +67,7 @@ static void *pmm_alloc(size_t size) {
 		if (p->size >= size && p->free)
 			return p->start;
 		void *q = current;
-		while (q % align(digit(size + BLOCK_SIZE)) != 0) q++;
+		while (((size_t)q) % align(digit(size + BLOCK_SIZE)) != 0) q++;
 		current = q + align(digit(size + BLOCK_SIZE));
 		block = (struct _Block *)p + size;
 		p->size = align(digit(size + BLOCK_SIZE)) - BLOCK_SIZE;
