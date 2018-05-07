@@ -38,7 +38,7 @@ static void *pmm_alloc(size_t size) {
 	};
 
 	size_t align(int digit) {
-		return 1 << (d - 1);
+		return 1 << (digit - 1);
 	};
 
 	if (size == 0)
@@ -84,11 +84,11 @@ static void pmm_free(void *ptr) {
 	{
 		if (p->start == ptr)
 		{
-			p->free = 0;
+			p->free = 1;
 			break;
 		}
 		p = p->next;
 	}
 	if (p->start == ptr)
-		p->free;
+		p->free = 1;
 }
