@@ -9,4 +9,16 @@ static inline void puts(const char *p) {
   }
 }
 
+struct thread {
+	//TODO
+};
+
+struct spinlock {
+	//TODO
+};
+
+struct semaphore {
+	//TODO
+};
+
 #endif
