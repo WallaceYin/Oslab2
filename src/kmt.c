@@ -88,7 +88,7 @@ static void kmt_teardown(thread_t *thread) {
 		_halt(1);
 	}
 	p->next = p->next->next;
-	pmm_free(thread);
+	pmm->free(thread);
 }
 
 static thread_t *kmt_schedule() {
