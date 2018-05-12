@@ -1,5 +1,5 @@
 #include <ylib.h>
-
+#include <stdarg.h>
 #define DEBUG
 
 static char log_out[1024];
