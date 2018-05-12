@@ -23,21 +23,104 @@ MOD_DEF(kmt) {
 	.sem_signal = sem_signal,
 };
 
+static thread_t *kmt_head;
+static thread_t *current_thread;
 static void kmt_init() {
-	//TODO
+	kmt_head = NULL;
+	current_thread = NULL;
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
-	
-	//TODO
+	if (kmt_head == NULL)
+	{
+		kmt_head == pmm_alloc(THREAD_SIZE);
+		if (kmt_head == NULL)
+		{
+			perror("Error happend when pmm_alloc");
+			_halt(1);
+		}
+		kmt_head->entry = entry;
+		kmt_head->arg = arg;
+		kmt_head->next = NULL;
+		kmt_head->free = 1;
+		if (/* */ 0)
+		{
+			kmt_head->free = 0;
+			current_thread = kmt_head;
+			((void(*)(void *))kmt_head->entry)(kmt_head->arg);
+		}
+	}
+	else
+	{
+		thread_t *p;
+		p = kmt_head;
+		while (p->next != NULL)
+			p = p->next;
+		p->next = pmm_alloc(THREAD_SIZE);
+		p = p->next;
+		p->entry = entry;
+		p->arg = arg;
+		p->next = NULL;
+		p->free = 1;
+		if (/* */ 0)
+		{
+			p->free = 0;
+			current_thread = p;
+			((void(*)(void *))p->entry)(p->arg);
+		}
+	}
+	return 0;
 }
 
 static void kmt_teardown(thread_t *thread) {
-	//TODO
+	if (!thread->free)
+	{
+		perror("Warning! You are going to free a thread in use!");
+		_halt(1);
+	}
+	thread_t *p;
+	p = kmt_head;
+	while (p->next != thread && p->next != NULL)
+		p = p->next;
+	if (p->next != thread)
+	{
+		perror("Oooops! this thread is not contained in thread list.");
+		_halt(1);
+	}
+	p->next = p->next->next;
+	pmm_free(thread);
 }
 
 static thread_t *kmt_schedule() {
-	//TODO
+	if (current_thread == NULL)
+		return NULL;
+	if (current_thread->free == 0)
+	{
+		perror("Error! some serious problem triggered.");
+		_halt(1);
+	}
+	current_thread->free = 1;
+	if (current_thread->next != NULL)
+	{
+		current_thread->next->free = 0;
+		current_thread = current_thread->next;
+		return current_thread;
+	}
+	else if (current_thread->next == kmt_head)
+	{
+		perror("Warning! There are no avaliable thread now.");
+		_halt(1);
+	}
+	else
+	{
+		kmt_head->free = 0;
+		current_thread = kmt_head;
+		return current_thread;
+	}
+	
+	perror("Warning! Should not reach here.");
+	while (1);
+	return NULL;
 }
 
 static void spin_init(spinlock_t *lk, const char *name) {
