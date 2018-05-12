@@ -42,7 +42,9 @@ static void *pmm_alloc(size_t size) {
 	};
 
 	if (size == 0)
+	{
 		return NULL;
+	}
 	if (block == NULL)
 	{
 		void *p = current;
