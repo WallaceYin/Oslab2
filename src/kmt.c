@@ -33,7 +33,7 @@ static void kmt_init() {
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	if (kmt_head == NULL)
 	{
-		kmt_head == pmm_alloc(THREAD_SIZE);
+		kmt_head == pmm->alloc(THREAD_SIZE);
 		if (kmt_head == NULL)
 		{
 			perror("Error happend when pmm_alloc");
