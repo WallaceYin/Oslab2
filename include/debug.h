@@ -18,7 +18,7 @@ void Log(const char *fmt, ...) {
 
 void perror(const char *fmt) {
 	printf("\033[31m");
-	for (char *p = fmt; *p; p++)
+	for (char *p = (char *)fmt; *p; p++)
 		_putc(*p);
 	printf("\n");
 	printf("\033[0m");
