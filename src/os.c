@@ -4,14 +4,19 @@
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
+static void idel_run();
 
 MOD_DEF(os) {
   .init = os_init,
   .run = os_run,
   .interrupt = os_interrupt,
 };
-
+static _RegSet *idel_regset;
 static void os_init() {
+	_Area kstack;
+	kstack.start = pmm->alloc(REGSET_SIZE);
+	kstack.end = kstack.start + REGSET_SIZE;
+	idel_regset = _made(kstack, idel_run, NULL);
 	printf("Hello, OS World!\n");
 }
 
@@ -25,8 +30,11 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-	current_thread->regset = regs;
+	if (current_thread != NULL)
+		current_thread->regset = regs;
 	thread_t *p = kmt->schedule();
+	if (p == NULL)
+		return idel_regset;
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
@@ -67,4 +75,8 @@ static void test_run(void) {
 	Log("Continue");
 	kmt->create(&t2, f, (void*)&c2);
 	
+}
+
+static void idel_run(void *arg) {
+	while (1);
 }

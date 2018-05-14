@@ -29,6 +29,7 @@ static thread_t *kmt_head;
 static void kmt_init() {
 	kmt_head = NULL;
 	current_thread = NULL;
+
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
@@ -105,7 +106,7 @@ static void kmt_teardown(thread_t *thread) {
 
 static thread_t *kmt_schedule() {
 	if (current_thread == NULL)
-		return NULL;
+		return kmt_head;
 	Log("kmt_schedule triggered.");
 	if (current_thread->free == 1)
 	{
@@ -123,8 +124,10 @@ static thread_t *kmt_schedule() {
 	{
 		/*perror("Warning! There are no avaliable thread now.");
 		_halt(1);*/
-		current_thread->free = 0;
-		return current_thread;
+		/*current_thread->free = 0;
+		return current_thread;*/
+		current_thread = NULL;
+		return NULL;
 	}
 	else
 	{
