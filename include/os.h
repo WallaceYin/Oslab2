@@ -2,7 +2,7 @@
 #define __OS_H__
 
 #include <kernel.h>
-#define THREAD_SIZE 12
+#define THREAD_SIZE 20
 #define REGSET_SIZE 64
 static inline void puts(const char *p) {
   for (; *p; p++) {
@@ -12,6 +12,8 @@ static inline void puts(const char *p) {
 
 struct thread {
 	_RegSet *regset;
+	void (*entry)(void *arg);
+	void *arg;
 	struct thread *next; // next thread
 	int free; //free = the process is running ? 0 : 1;
 };

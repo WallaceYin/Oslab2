@@ -49,6 +49,8 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		}
 		kmt_head->next = NULL;
 		kmt_head->free = 1;
+		kmt_head->entry = entry;
+		kmt_head->arg = arg;
 		kmt_head->regset = _make(kstack, entry, arg);
 		current_thread = kmt_head;
 		if (_intr_read())
@@ -70,6 +72,8 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		p = p->next;
 		p->next = NULL;
 		p->free = 1;
+		p->entry = entry;
+		p->arg = arg;
 		p->regset = _make(kstack, entry, arg);
 		current_thread = p;
 		if (_intr_read())
