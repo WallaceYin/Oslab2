@@ -18,7 +18,7 @@ static void os_init() {
 	printf("Hello, OS World!\n");
 }
 
-void test_run();
+static void test_run();
 static void os_run() {
   _intr_write(1); // enable interrupt
 #ifdef DEBUG
@@ -65,11 +65,12 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
 static void f(void *arg) {
 	while (1) {
-		_putc((char)arg);
+		_putc((char*)arg);
 	}
 }
 
 static void test_run(void) {
+	thread_t t1, t2;
 	kmt->create(&t1, f, (void*)'a');
 	kmt->create(&t2, f, (void*)'b');
 	
