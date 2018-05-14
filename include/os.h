@@ -2,7 +2,6 @@
 #define __OS_H__
 
 #include <kernel.h>
-#include <debug.h>
 #define THREAD_SIZE 16
 static inline void puts(const char *p) {
   for (; *p; p++) {

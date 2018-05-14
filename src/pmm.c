@@ -1,4 +1,5 @@
 #include <os.h>
+#include <debug.h>
 #define BLOCK_SIZE 16
 static void pmm_init();
 static void *pmm_alloc(size_t size);

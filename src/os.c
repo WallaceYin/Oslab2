@@ -1,5 +1,5 @@
 #include <os.h>
-
+#include <debug.h>
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
