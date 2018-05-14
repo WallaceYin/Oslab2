@@ -18,6 +18,7 @@ struct thread {
 	int free; //free = the process is running ? 0 : 1;
 };
 typedef	struct thread thread_t;
+thread_t *current_thread;
 
 struct spinlock {
 	const char *nam;

@@ -26,7 +26,6 @@ MOD_DEF(kmt) {
 };
 
 static thread_t *kmt_head;
-static thread_t *current_thread;
 static void kmt_init() {
 	kmt_head = NULL;
 	current_thread = NULL;

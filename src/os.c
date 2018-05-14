@@ -12,7 +12,6 @@ MOD_DEF(os) {
 };
 
 static void os_init() {
-	old_regs = NULL;
 	printf("Hello, OS World!\n");
 }
 
