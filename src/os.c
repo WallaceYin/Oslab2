@@ -25,8 +25,8 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
+	current_thread->regset = regs;
 	thread_t *p = kmt->schedule();
-	p->regset = regs;
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
