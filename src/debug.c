@@ -1,7 +1,7 @@
 #include <debug.h>
 
 static char log_out[1024];
-static void Log(const char *fmt, ...) {
+void Log(const char *fmt, ...) {
 	printf("\033[34m");
 	memset(log_out, 0, 1024);
 	va_list ap;
@@ -14,7 +14,7 @@ static void Log(const char *fmt, ...) {
 	printf("\033[0m");
 }
 
-static void perror(const char *fmt) {
+void perror(const char *fmt) {
 	printf("\033[31m");
 	for (char *p = (char *)fmt; *p; p++)
 		_putc(*p);
