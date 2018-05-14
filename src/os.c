@@ -29,7 +29,7 @@ static void os_run() {
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	if (_intr_read())
-		kmt_schedule();
+		kmt->schedule();
 
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
