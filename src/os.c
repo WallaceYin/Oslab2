@@ -27,7 +27,7 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-	thread_t *p = kmt_schedule();
+	thread_t *p = kmt->schedule();
 	((void(*)(void *))p->entry)(p->arg);
 
 	switch (ev.event) {
