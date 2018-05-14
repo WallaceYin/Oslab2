@@ -59,7 +59,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
     _halt(1);
   }*/
   //return NULL; // this is allowed by AM
-	return p->regset;
+	return *reg;
 }
 
 static void f(void *arg) {
