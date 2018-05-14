@@ -39,7 +39,6 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	if (kmt_head == NULL)
 	{
 		kmt_head = pmm->alloc(THREAD_SIZE);
-		Log("finsih");
 		if (kmt_head == NULL)
 		{
 			perror("Error happend when pmm_alloc");
@@ -101,6 +100,7 @@ static void kmt_teardown(thread_t *thread) {
 static thread_t *kmt_schedule() {
 	if (current_thread == NULL)
 		return NULL;
+	Log("kmt_schedule triggered.");
 	current_thread->free = 1;
 	if (current_thread->next != NULL)
 	{
