@@ -2,5 +2,5 @@
 #include <stdarg.h>
 #define DEBUG
 
-void Log(const char *fmt, ...);
-void perror(const char *fmt);
+static void Log(const char *fmt, ...);
+static void perror(const char *fmt);
