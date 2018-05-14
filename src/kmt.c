@@ -43,7 +43,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		kmt_head->arg = arg;
 		kmt_head->next = NULL;
 		kmt_head->free = 1;
-		if (/* */ 0)
+		if (_intr_read())
 		{
 			kmt_head->free = 0;
 			current_thread = kmt_head;
@@ -62,7 +62,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		p->arg = arg;
 		p->next = NULL;
 		p->free = 1;
-		if (/* */ 0)
+		if (_intr_read())
 		{
 			p->free = 0;
 			current_thread = p;
