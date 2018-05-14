@@ -123,7 +123,7 @@ static thread_t *kmt_schedule() {
 	return NULL;
 }
 
-//TODO: Locked
+int locked;
 static void spin_init(spinlock_t *lk, const char *name) {
 	lk->nam = name;
 	lk->locked = 0;
