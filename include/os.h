@@ -14,7 +14,7 @@ struct thread {
 	void (*entry)(void *arg);
 	void *arg;
 	struct thread *next; // next thread
-	_Regset *regset; // Regset get from _make
+	_RegSet *regset; // Regset get from _make
 	int free; //free = the process is running ? 0 : 1;
 };
 typedef	struct thread thread_t;
