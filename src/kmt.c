@@ -123,16 +123,27 @@ static thread_t *kmt_schedule() {
 	return NULL;
 }
 
+//TODO: Locked
 static void spin_init(spinlock_t *lk, const char *name) {
-	//TODO
+	lk->nam = name;
+	lk->locked = 0;
+	locked = 0;
 }
 
 static void spin_lock(spinlock_t *lk) {
-	//TODO
+#ifdef DEBUG
+	Log("Locked: %s", lk->nam);
+#endif
+	lk->locked = 1;
+	locked = 1;
 }
 
 static void spin_unlock(spinlock_t *lk) {
-	//TODO
+#ifdef DEBUG
+	Log("Unlocked: %s", lk->nam);
+#endif
+	lk->locked = 0;
+	locked = 0;
 }
 
 static void sem_init(sem_t *sem, const char *name, int value) {

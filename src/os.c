@@ -60,7 +60,13 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
   return NULL; // this is allowed by AM
 }
 
-void test_run(void) {
+static void f(void *arg) {
+	while (1) {
+		_putc((char)arg);
+	}
+}
+
+static void test_run(void) {
 	kmt->create(&t1, f, (void*)'a');
 	kmt->create(&t2, f, (void*)'b');
 	

@@ -19,7 +19,8 @@ struct thread {
 typedef	struct thread thread_t;
 
 struct spinlock {
-	//TODO
+	const char *nam;
+	int locked;
 };
 typedef struct spinlock spinlock_t;
 
