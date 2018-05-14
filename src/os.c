@@ -16,7 +16,7 @@ static void os_init() {
 	_Area kstack;
 	kstack.start = pmm->alloc(REGSET_SIZE);
 	kstack.end = kstack.start + REGSET_SIZE;
-	idel_regset = _made(kstack, idel_run, NULL);
+	idel_regset = _make(kstack, idel_run, NULL);
 	printf("Hello, OS World!\n");
 }
 
