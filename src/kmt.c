@@ -120,7 +120,7 @@ static thread_t *kmt_schedule() {
 		current_thread = current_thread->next;
 		return current_thread;
 	}
-	else if (current_thread->next == kmt_head)
+	else if (current_thread == kmt_head)
 	{
 		perror("Warning! There are no avaliable thread now.");
 		_halt(1);
