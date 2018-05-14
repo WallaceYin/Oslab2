@@ -96,11 +96,6 @@ static void kmt_teardown(thread_t *thread) {
 static thread_t *kmt_schedule() {
 	if (current_thread == NULL)
 		return NULL;
-	if (current_thread->free == 0)
-	{
-		perror("Error! some serious problem triggered.");
-		_halt(1);
-	}
 	current_thread->free = 1;
 	if (current_thread->next != NULL)
 	{
