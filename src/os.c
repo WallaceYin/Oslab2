@@ -65,13 +65,16 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
 static void f(void *arg) {
 	while (1) {
-		_putc((char)arg);
+		_putc((char)*arg);
 	}
 }
 
 static void test_run(void) {
 	thread_t t1, t2;
-	kmt->create(&t1, f, (void*)'a');
-	kmt->create(&t2, f, (void*)'b');
+	char c1,c2;
+	c1 = 'a';
+	c2 = 'b';
+	kmt->create(&t1, f, (void*)&c1);
+	kmt->create(&t2, f, (void*)&c2);
 	
 }
