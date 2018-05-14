@@ -1,5 +1,6 @@
 #include <os.h>
 #include <debug.h>
+
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
@@ -28,7 +29,6 @@ static void os_run() {
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	thread_t *p = kmt->schedule();
-	((void(*)(void *))p->entry)(p->arg);
 
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
@@ -58,7 +58,8 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
     _putc('x');
     _halt(1);
   }*/
-  return NULL; // this is allowed by AM
+  //return NULL; // this is allowed by AM
+	return p->regset;
 }
 
 static void f(void *arg) {

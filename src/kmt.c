@@ -39,6 +39,9 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	if (kmt_head == NULL)
 	{
 		kmt_head = pmm->alloc(THREAD_SIZE);
+		_Area kstack;
+		kstack.start = pmm->alloc(REGSET_SIZE);
+		kstack.end = kstack.start + REGSET_SIZE;
 		if (kmt_head == NULL)
 		{
 			perror("Error happend when pmm_alloc");
@@ -48,6 +51,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		kmt_head->arg = arg;
 		kmt_head->next = NULL;
 		kmt_head->free = 1;
+		kmt_head->regset = _make(kstack, entry, arg);
 		current_thread = kmt_head;
 		if (_intr_read())
 		{
@@ -62,11 +66,15 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		while (p->next != NULL)
 			p = p->next;
 		p->next = pmm->alloc(THREAD_SIZE);
+		_Area kstack;
+		kstack.start = pmm->alloc(REGSET_SIZE);
+		kstack.end = kstack.start + REGSET_SIZE;
 		p = p->next;
 		p->entry = entry;
 		p->arg = arg;
 		p->next = NULL;
 		p->free = 1;
+		p->regset = _make(kstack, entry, arg);
 		current_thread = p;
 		if (_intr_read())
 		{
