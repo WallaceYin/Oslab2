@@ -29,7 +29,7 @@ static void os_run() {
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	thread_t *p = kmt->schedule();
-
+	p->regset = regs;
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
@@ -59,7 +59,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
     _halt(1);
   }*/
   //return NULL; // this is allowed by AM
-	return *reg;
+	return p->regset;
 }
 
 static void f(void *arg) {
