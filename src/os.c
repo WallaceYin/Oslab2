@@ -27,18 +27,13 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-	if (_intr_read())
-	{
-		Log("Intr triggered.\n");
-		kmt->schedule();
-	}
-
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
 			Log("Irq_timer called.\n");
+			Log("Timer status: %d\n", _intr_read());
 #endif
-			//TODO: irq_timer
+			
 			break;
 
 		case _EVENT_IRQ_IODEV:
