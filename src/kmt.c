@@ -52,7 +52,6 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		if (_intr_read())
 		{
 			kmt_head->free = 0;
-			Log("To exeve next");
 			((void(*)(void *))kmt_head->entry)(kmt_head->arg);
 		}
 	}
@@ -101,9 +100,9 @@ static thread_t *kmt_schedule() {
 	if (current_thread == NULL)
 		return NULL;
 	Log("kmt_schedule triggered.");
-	if (current_thread->free == 0)
+	if (current_thread->free == 1)
 	{
-		current_thread->free = 1;
+		current_thread->free = 0;
 		return current_thread;
 	}
 	if (current_thread->next != NULL)
