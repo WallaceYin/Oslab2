@@ -34,7 +34,7 @@ static void kmt_init() {
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 #ifdef DEBUG
-	Log("New thread created.\n");
+	Log("New thread created.");
 #endif
 	if (kmt_head == NULL)
 	{
@@ -50,6 +50,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		kmt_head->free = 1;
 		if (_intr_read())
 		{
+			Log("Succ");
 			kmt_head->free = 0;
 			current_thread = kmt_head;
 			((void(*)(void *))kmt_head->entry)(kmt_head->arg);
