@@ -15,6 +15,7 @@ MOD_DEF(kmt) {
 	.init = kmt_init,
 	.create = kmt_create,
 	.teardown = kmt_teardown,
+	.schedule = kmt_schedule,
 	.spin_init = spin_init,
 	.spin_lock = spin_lock,
 	.spin_unlock = spin_unlock,
