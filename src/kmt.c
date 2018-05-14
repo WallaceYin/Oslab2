@@ -33,6 +33,9 @@ static void kmt_init() {
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
+#ifdef DEBUG
+	Log("New thread created.\n");
+#endif
 	if (kmt_head == NULL)
 	{
 		kmt_head = pmm->alloc(THREAD_SIZE);
