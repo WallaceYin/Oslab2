@@ -105,6 +105,7 @@ static thread_t *kmt_schedule() {
 		current_thread->free = 0;
 		return current_thread;
 	}
+	current_thread->free = 0;
 	if (current_thread->next != NULL)
 	{
 		current_thread->next->free = 0;
