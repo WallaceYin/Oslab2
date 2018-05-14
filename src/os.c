@@ -73,6 +73,7 @@ static void test_run(void) {
 	c1 = 'a';
 	c2 = 'b';
 	kmt->create(&t1, f, (void*)&c1);
+	Log("Continue");
 	kmt->create(&t2, f, (void*)&c2);
 	
 }
