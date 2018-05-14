@@ -12,9 +12,7 @@ MOD_DEF(os) {
 };
 
 static void os_init() {
-  /*for (const char *p = "Hello, OS World!\n"; *p; p++) {
-    _putc(*p);
-  }*/
+	old_regs = NULL;
 	printf("Hello, OS World!\n");
 }
 
@@ -52,13 +50,6 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 			break;
 	}
 
-  /*if (ev.event == _EVENT_IRQ_TIMER) _putc('*');
-  if (ev.event == _EVENT_IRQ_IODEV) _putc('I');
-  if (ev.event == _EVENT_ERROR) {
-    _putc('x');
-    _halt(1);
-  }*/
-  //return NULL; // this is allowed by AM
 	return p->regset;
 }
 
@@ -66,7 +57,6 @@ static void f(void *arg) {
 	while (1) {
 		_putc(*(char *)arg);
 	}
-	//_putc(*(char *)arg);
 }
 
 static void test_run(void) {
