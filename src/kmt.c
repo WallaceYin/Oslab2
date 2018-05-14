@@ -48,11 +48,10 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		kmt_head->arg = arg;
 		kmt_head->next = NULL;
 		kmt_head->free = 1;
+		current_thread = kmt_head;
 		if (_intr_read())
 		{
-			Log("Succ");
 			kmt_head->free = 0;
-			current_thread = kmt_head;
 			((void(*)(void *))kmt_head->entry)(kmt_head->arg);
 		}
 	}
@@ -68,10 +67,10 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 		p->arg = arg;
 		p->next = NULL;
 		p->free = 1;
+		current_thread = p;
 		if (_intr_read())
 		{
 			p->free = 0;
-			current_thread = p;
 			((void(*)(void *))p->entry)(p->arg);
 		}
 	}
@@ -101,7 +100,11 @@ static thread_t *kmt_schedule() {
 	if (current_thread == NULL)
 		return NULL;
 	Log("kmt_schedule triggered.");
-	current_thread->free = 1;
+	if (current_thread->free = 0)
+	{
+		current_thread->free = 1;
+		return current_thread;
+	}
 	if (current_thread->next != NULL)
 	{
 		current_thread->next->free = 0;
