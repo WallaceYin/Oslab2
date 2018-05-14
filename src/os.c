@@ -27,25 +27,26 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
+	thread_t *p = kmt_schedule();
+	((void(*)(void *))p->entry)(p->arg);
+
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
-			Log("Irq_timer called.\n");
-			Log("Timer status: %d\n", _intr_read());
+			Log("Irq_timer called.");
 #endif
-			
 			break;
 
 		case _EVENT_IRQ_IODEV:
 #ifdef DEBUG
-			Log("Irq_iodev called.\n");
+			Log("Irq_iodev called.");
 #endif
 			//TODO: irq_iodev
 			break;
 
 		case _EVENT_ERROR:
 #ifdef DEBUG
-			Log("An Error happeded.\n");
+			Log("An Error happeded.");
 #endif
 			_halt(1);
 			break;
