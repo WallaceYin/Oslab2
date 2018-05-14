@@ -38,6 +38,7 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 #endif
 	if (kmt_head == NULL)
 	{
+		Log("First\n");
 		kmt_head = pmm->alloc(THREAD_SIZE);
 		if (kmt_head == NULL)
 		{
