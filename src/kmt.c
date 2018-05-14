@@ -100,7 +100,7 @@ static thread_t *kmt_schedule() {
 	if (current_thread == NULL)
 		return NULL;
 	Log("kmt_schedule triggered.");
-	if (current_thread->free = 0)
+	if (current_thread->free == 0)
 	{
 		current_thread->free = 1;
 		return current_thread;
