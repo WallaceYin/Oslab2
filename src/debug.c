@@ -1,4 +1,6 @@
 #include <debug.h>
+
+static char log_out[1024];
 void Log(const char *fmt, ...) {
 	printf("\033[34m");
 	memset(log_out, 0, 1024);
