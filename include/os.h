@@ -21,9 +21,6 @@ struct thread {
 };
 typedef	struct thread thread_t;
 thread_t tlist[MAX_THREAD];
-int tlist_len;
-int pid_num;
-int current_pid;
 
 struct spinlock {
 	const char *nam;

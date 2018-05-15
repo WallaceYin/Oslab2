@@ -11,6 +11,8 @@ static void spin_unlock(spinlock_t *lk);
 static void sem_init(sem_t *sem, const char *name, int value);
 static void sem_wait(sem_t *sem);
 static void sem_signal(sem_t *sem);
+static int current_id;
+static 
 
 MOD_DEF(kmt) {
 	.init = kmt_init,
