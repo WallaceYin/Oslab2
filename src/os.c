@@ -4,7 +4,6 @@
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
-static void idel_run();
 
 MOD_DEF(os) {
   .init = os_init,
@@ -26,8 +25,8 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-	thread_t *p = kmt->shedule();
-	return p;
+	thread_t *p = kmt->schedule();
+	return p->regset;
 	//TODO
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
