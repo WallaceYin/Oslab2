@@ -11,30 +11,24 @@ MOD_DEF(os) {
   .run = os_run,
   .interrupt = os_interrupt,
 };
-static _RegSet *idel_regset;
+
 static void os_init() {
-	_Area kstack;
-	kstack.start = pmm->alloc(REGSET_SIZE);
-	kstack.end = kstack.start + REGSET_SIZE;
-	idel_regset = _make(kstack, idel_run, NULL);
 	printf("Hello, OS World!\n");
 }
 
 static void test_run();
 static void os_run() {
-  _intr_write(1); // enable interrupt
 #ifdef DEBUG
 	test_run();
 #endif
+	_intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-	if (current_thread != NULL)
-		current_thread->regset = regs;
-	thread_t *p = kmt->schedule();
-	if (p == NULL)
-		return idel_regset;
+	thread_t *p = kmt->shedule();
+	return p;
+	//TODO
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
@@ -75,8 +69,4 @@ static void test_run(void) {
 	Log("Continue");
 	kmt->create(&t2, f, (void*)&c2);
 	
-}
-
-static void idel_run(void *arg) {
-	while (1);
 }

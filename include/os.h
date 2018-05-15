@@ -4,6 +4,9 @@
 #include <kernel.h>
 #define THREAD_SIZE 20
 #define REGSET_SIZE 64
+#define KSTACK_SIZE 4096
+#define MAX_THREAD 32
+
 static inline void puts(const char *p) {
   for (; *p; p++) {
     _putc(*p);
@@ -12,13 +15,15 @@ static inline void puts(const char *p) {
 
 struct thread {
 	_RegSet *regset;
-	void (*entry)(void *arg);
-	void *arg;
-	struct thread *next; // next thread
+	void *kstack;
+	int pid;
 	int free; //free = the process is running ? 0 : 1;
 };
 typedef	struct thread thread_t;
-thread_t *current_thread;
+thread_t tlist[MAX_THREAD];
+int tlist_len;
+int pid_num;
+int current_pid;
 
 struct spinlock {
 	const char *nam;

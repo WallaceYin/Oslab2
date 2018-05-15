@@ -25,116 +25,94 @@ MOD_DEF(kmt) {
 	.sem_signal = sem_signal,
 };
 
-static thread_t *kmt_head;
 static void kmt_init() {
-	kmt_head = NULL;
-	current_thread = NULL;
-
+	tlist_len = 0;
+	pid_num = 0;
+	current_id = -1;
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 #ifdef DEBUG
 	Log("New thread created, arg is %c", *(char *)arg);
 #endif
-	if (kmt_head == NULL)
+	int 2modify = -1;
+	for (int i = 0; i < tlist_len; i++)
+		if (tlist[i].free == 1)
+		{
+			2modify = i;
+			break;
+		}
+	if (2modify == -1)
+		2modify = tlist_len;
+	tlist_len = tlist_len + 1;
+	if (tlist_len > MAX_THREAD)
 	{
-		kmt_head = pmm->alloc(THREAD_SIZE);
-		_Area kstack;
-		kstack.start = pmm->alloc(REGSET_SIZE);
-		kstack.end = kstack.start + REGSET_SIZE;
-		if (kmt_head == NULL)
-		{
-			perror("Error happend when pmm_alloc");
-			_halt(1);
-		}
-		kmt_head->next = NULL;
-		kmt_head->free = 1;
-		kmt_head->entry = entry;
-		kmt_head->arg = arg;
-		kmt_head->regset = _make(kstack, entry, arg);
-		current_thread = kmt_head;
-		if (_intr_read())
-		{
-			kmt_head->free = 0;
-			((void(*)(void *))kmt_head->entry)(kmt_head->arg);
-		}
+		perror("Thread list overfull.");
+		_halt(1);
 	}
-	else
-	{
-		thread_t *p;
-		p = kmt_head;
-		while (p->next != NULL)
-			p = p->next;
-		p->next = pmm->alloc(THREAD_SIZE);
-		_Area kstack;
-		kstack.start = pmm->alloc(REGSET_SIZE);
-		kstack.end = kstack.start + REGSET_SIZE;
-		p = p->next;
-		p->next = NULL;
-		p->free = 1;
-		p->entry = entry;
-		p->arg = arg;
-		p->regset = _make(kstack, entry, arg);
-		current_thread = p;
-		if (_intr_read())
-		{
-			p->free = 0;
-			((void(*)(void *))p->entry)(p->arg);
-		}
-	}
-	return 0;
+	tlist[2modify].free = 0;
+	thread->free = 0;
+	tlist[2modify].kstack = pmm->alloc(KSTACK_SIZE);
+	_Area Kstack;
+	Kstack.start = tlist[2modify].kstack;
+	Kstack.end = Kstack.start + MAX_THREAD;
+	thread->kstack = Kstack.start;
+	tlist[2modify].regset = _make(Kstack, entry, arg);
+	thread->regset = tlist[2modify].regset;
+	tlist[2modify].pid = pid_num;
+	thread->pid = tlist[2modify].pid;
+	pid_num++;
+	current_id = 2modify;
+	return tlist[2modify].pid;
 }
 
-static void kmt_teardown(thread_t *thread) {
-	if (!thread->free)
+static void kmt_teardown(thread_t *thread) {	
+	int found = 0;
+	for (int i = 0; i < tlist_len; i++)
+		if (tlist[i].pid == thread->pid)
+		{
+			tlist[i].free = 1;
+			found = 1;
+			if (current_id == i)
+			{
+				for (int j = 0; j < tlist_len; j++)
+					if (!tlist[j].free)
+						current_id = j;
+			}
+		}
+	if (!found)
 	{
-		perror("Warning! You are going to free a thread in use!");
-		_halt(1);
+		perror("This thread is not included in thread list!\n");
 	}
-	thread_t *p;
-	p = kmt_head;
-	while (p->next != thread && p->next != NULL)
-		p = p->next;
-	if (p->next != thread)
-	{
-		perror("Oooops! this thread is not contained in thread list.");
-		_halt(1);
-	}
-	p->next = p->next->next;
-	pmm->free(thread);
 }
 
 static thread_t *kmt_schedule() {
-	if (current_thread == NULL)
-		return kmt_head;
 	Log("kmt_schedule triggered.");
-	if (current_thread->free == 1)
+	thread_t *p;
+	p = &tlist[current_id];
+	int next_id = -1;
+	for (int i = current_id + 1; i < tlist_len; i++)
+		if (tlist[i].free == 0)
+		{
+			next_id = i;
+			current_id = next_id;
+			return p;
+		}
+	if (next_id == -1)
+		for (int i = 0; i < current_id; i++)
+			if (tlist[i].free == 0)
+			{
+				next_id = i;
+				current_id = next_id;
+				return p;
+			}
+	if (next_id == -1)
+		return p;
+	if (current_id == -1)
 	{
-		current_thread->free = 0;
-		return current_thread;
-	}
-	current_thread->free = 1;
-	if (current_thread->next != NULL)
-	{
-		current_thread->next->free = 0;
-		current_thread = current_thread->next;
-		return current_thread;
-	}
-	else if (current_thread == kmt_head)
-	{
-		/*perror("Warning! There are no avaliable thread now.");
-		_halt(1);*/
-		/*current_thread->free = 0;
-		return current_thread;*/
-		current_thread = NULL;
+		perror("Serious problem happened.");
+		_halt(1);
 		return NULL;
-	}
-	else
-	{
-		kmt_head->free = 0;
-		current_thread->free = 1;
-		current_thread = kmt_head;
-		return current_thread;
 	}
 	
 	perror("Warning! Should not reach here.");
