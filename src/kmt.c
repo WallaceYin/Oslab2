@@ -38,35 +38,35 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 #ifdef DEBUG
 	Log("New thread created, arg is %c", *(char *)arg);
 #endif
-	int 2modify = -1;
+	int nthread = -1;
 	for (int i = 0; i < tlist_len; i++)
 		if (tlist[i].free == 1)
 		{
-			2modify = i;
+			nthread = i;
 			break;
 		}
-	if (2modify == -1)
-		2modify = tlist_len;
+	if (nthread == -1)
+		nthread = tlist_len;
 	tlist_len = tlist_len + 1;
 	if (tlist_len > MAX_THREAD)
 	{
 		perror("Thread list overfull.");
 		_halt(1);
 	}
-	tlist[2modify].free = 0;
+	tlist[nthread].free = 0;
 	thread->free = 0;
-	tlist[2modify].kstack = pmm->alloc(KSTACK_SIZE);
+	tlist[nthread].kstack = pmm->alloc(KSTACK_SIZE);
 	_Area Kstack;
-	Kstack.start = tlist[2modify].kstack;
+	Kstack.start = tlist[nthread].kstack;
 	Kstack.end = Kstack.start + MAX_THREAD;
 	thread->kstack = Kstack.start;
-	tlist[2modify].regset = _make(Kstack, entry, arg);
-	thread->regset = tlist[2modify].regset;
-	tlist[2modify].pid = pid_num;
-	thread->pid = tlist[2modify].pid;
+	tlist[nthread].regset = _make(Kstack, entry, arg);
+	thread->regset = tlist[nthread].regset;
+	tlist[nthread].pid = pid_num;
+	thread->pid = tlist[nthread].pid;
 	pid_num++;
-	current_id = 2modify;
-	return tlist[2modify].pid;
+	current_id = nthread;
+	return tlist[nthread].pid;
 }
 
 static void kmt_teardown(thread_t *thread) {	
