@@ -54,10 +54,10 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 }
 
 static void f(void *arg) {
-	/*while (1) {
+	while (1) {
 		_putc(*(char *)arg);
-	}*/
-	_putc(*(char *)arg);
+	}
+	//_putc(*(char *)arg);
 }
 
 static void test_run(void) {
