@@ -66,6 +66,8 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	thread->pid = tlist[nthread].pid;
 	pid_num++;
 	current_id = nthread;
+	if (_intr_read())
+		((void(*)(void *))entry(arg));
 	return tlist[nthread].pid;
 }
 
