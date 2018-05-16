@@ -77,7 +77,7 @@ static void producer(void *arg) {
 	while (1) {
 		kmt->sem_wait(&empty);
 		_putc('[');
-		kmt->signal(&fill);
+		kmt->sem_signal(&fill);
 	}
 }
 
