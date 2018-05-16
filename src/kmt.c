@@ -34,7 +34,7 @@ static void kmt_init() {
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 #ifdef DEBUG
-	Log("New thread created, arg is %c", *(char *)arg);
+	Log("New thread created");
 #endif
 	int nthread = -1;
 	for (int i = 0; i < tlist_len; i++)
