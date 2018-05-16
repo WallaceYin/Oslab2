@@ -73,33 +73,9 @@ static void kmt_teardown(thread_t *thread) {
 }
 
 static thread_t *kmt_schedule() {
+#ifdef DEBUG
 	Log("kmt_schedule triggered.");
-	/*thread_t *p;
-	p = &tlist[current_id];
-	int next_id = -1;
-	for (int i = current_id + 1; i < tlist_len; i++)
-		if (tlist[i].free == 0)
-		{
-			next_id = i;
-			current_id = next_id;
-			return p;
-		}
-	if (next_id == -1)
-		for (int i = 0; i < current_id; i++)
-			if (tlist[i].free == 0)
-			{
-				next_id = i;
-				current_id = next_id;
-				return p;
-			}
-	if (next_id == -1)
-		return p;
-	if (current_id == -1)
-	{
-		perror("Serious problem happened.");
-		_halt(1);
-		return NULL;
-	}*/
+#ifdef DEBUG
 	int next_id;
 	if (current_id == -1)
 	{
@@ -192,6 +168,9 @@ static void sem_wait(sem_t *sem) {
 	sem->count--;
 	if (sem->count < 0)
 	{
+#ifdef DEBUG
+		Log("Sleep current process.");
+#endif
 		if (current_id == -1)
 		{
 			perror("Error! No process is running.");
@@ -207,6 +186,9 @@ static void sem_signal(sem_t *sem) {
 	sem->count++;
 	if (sem->sleep_id > -1)
 	{
+#ifdef DEBUG
+		Log("Wake up current process.");
+#endif
 		tlist[sem->sleep_id].free = 0;
 		current_id = sem->sleep_id;
 		sem->sleep_id = -1;

@@ -55,7 +55,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	return p->regset;
 }
 
-static void f(void *arg) {
+/*static void f(void *arg) {
 	while (1) {
 		_putc(*(char *)arg);
 	}
@@ -70,4 +70,29 @@ static void test_run(void) {
 	Log("Continue");
 	kmt->create(&t2, f, (void*)&c2);
 	
+}*/
+
+sem_t empty, fill;
+static void producer(void *arg) {
+	while (1) {
+		kmt->sem_wait(&empty);
+		_putc("[");
+		kmt->signal(&fill);
+	}
+}
+
+static void consumer(void *arg) {
+	while (1) {
+		kmt->sem_wait(&fill);
+		_putc("]");
+		kmt->sem_signal(&empty);
+	}
+}
+
+thread_t t1, t2;
+static void test_run() {
+	kmt->sem_init(empty, "empty", 3);
+	kmt->sem_init(fill, "fill", 0);
+	kmt->create(t1, producer, NULL);
+	kmt->create(t2, producer, NULL);
 }
