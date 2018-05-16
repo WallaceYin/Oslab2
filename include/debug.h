@@ -1,6 +1,6 @@
 #include <ylib.h>
 
-#define DEBUG
+//#define DEBUG
 
 void Log(const char *fmt, ...);
 void perror(const char *fmt);

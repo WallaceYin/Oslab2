@@ -20,9 +20,9 @@ static void os_init() {
 
 static void test_run();
 static void os_run() {
-#ifdef DEBUG
+//#ifdef DEBUG
 	test_run();
-#endif
+//#endif
 	_intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
