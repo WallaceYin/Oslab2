@@ -13,6 +13,7 @@ static void sem_wait(sem_t *sem);
 static void sem_signal(sem_t *sem);
 static int current_id;
 static int tlist_len;
+static int run_ins;
 
 MOD_DEF(kmt) {
 	.init = kmt_init,
@@ -30,6 +31,7 @@ MOD_DEF(kmt) {
 static void kmt_init() {
 	tlist_len = 0;
 	current_id = -1;
+	run_ins = 0;
 }
 
 static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
@@ -77,6 +79,12 @@ static thread_t *kmt_schedule() {
 	Log("kmt_schedule triggered.");
 #endif
 	int next_id;
+	if (run_ins && tlist[current_id].free == 0)
+	{
+		run_ins = 0;
+		thread_t *p = &tlist[current_id];
+		return p;
+	}
 	if (current_id == -1)
 	{
 		for (int i = 0; i < tlist_len; i++)
@@ -192,6 +200,7 @@ static void sem_signal(sem_t *sem) {
 		tlist[sem->sleep_id].free = 0;
 		current_id = sem->sleep_id;
 		sem->sleep_id = -1;
+		run_ins = 1;
 		_yield();
 	}
 }

@@ -95,4 +95,5 @@ static void test_run() {
 	kmt->sem_init(&fill, "fill", 0);
 	kmt->create(&t1, producer, NULL);
 	kmt->create(&t2, consumer, NULL);
+
 }
