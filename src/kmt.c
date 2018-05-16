@@ -122,7 +122,7 @@ static thread_t *kmt_schedule() {
 			thread_t *p = &tlist[next_id];
 			return p;
 		}
-		if (tlist[current_id].free == 1)
+		if (tlist[current_id].free == 0)
 		{
 			thread_t *p = &tlist[current_id];
 			return p;
