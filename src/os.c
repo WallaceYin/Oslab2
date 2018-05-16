@@ -1,6 +1,7 @@
 #include <os.h>
 #include <debug.h>
 #include <ylib.h>
+#define TEST
 
 static void os_init();
 static void os_run();
@@ -20,9 +21,9 @@ static void os_init() {
 
 static void test_run();
 static void os_run() {
-//#ifdef DEBUG
+#ifdef TEST
 	test_run();
-//#endif
+#endif
 	_intr_write(1); // enable interrupt
   while (1) ; // should never return
 }
@@ -30,7 +31,6 @@ static void os_run() {
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	if (last_id != -1)
 	{
-		//tlist[last_id].regset = regs;
 		memcpy(tlist[last_id].regset, (const void *)regs, REGSET_SIZE);
 	}
 	thread_t *p = kmt->schedule();
@@ -59,23 +59,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	return p->regset;
 }
 
-/*static void f(void *arg) {
-	while (1) {
-		_putc(*(char *)arg);
-	}
-}
-
-static void test_run(void) {
-	thread_t t1, t2;
-	char c1,c2;
-	c1 = 'a';
-	c2 = 'b';
-	kmt->create(&t1, f, (void*)&c1);
-	Log("Continue");
-	kmt->create(&t2, f, (void*)&c2);
-	
-}*/
-
+#ifdef TEST
 sem_t empty, fill;
 static void producer(void *arg) {
 	while (1) {
@@ -99,5 +83,5 @@ static void test_run() {
 	kmt->sem_init(&fill, "fill", 0);
 	kmt->create(&t1, producer, NULL);
 	kmt->create(&t2, consumer, NULL);
-
 }
+#endif
