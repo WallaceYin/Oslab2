@@ -26,8 +26,6 @@ static void os_run() {
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	thread_t *p = kmt->schedule();
-	return p->regset;
-	//TODO
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
@@ -39,7 +37,6 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 #ifdef DEBUG
 			Log("Irq_iodev called.");
 #endif
-			//TODO: irq_iodev
 			break;
 
 		case _EVENT_ERROR:
@@ -54,9 +51,13 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 }
 
 static void f(void *arg) {
+	spinlock_t lk;
+	spin_init(lk, "Spinlock test");
+	spin_lock(lk);
 	while (1) {
 		_putc(*(char *)arg);
 	}
+	spin_unlock(lk);
 	//_putc(*(char *)arg);
 }
 

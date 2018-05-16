@@ -125,11 +125,10 @@ static thread_t *kmt_schedule() {
 	return NULL;
 }
 
-int locked;
 static void spin_init(spinlock_t *lk, const char *name) {
 	lk->nam = name;
 	lk->locked = 0;
-	locked = 0;
+	
 }
 
 static void spin_lock(spinlock_t *lk) {
@@ -137,7 +136,7 @@ static void spin_lock(spinlock_t *lk) {
 	Log("Locked: %s", lk->nam);
 #endif
 	lk->locked = 1;
-	locked = 1;
+	_intr_write(0);
 }
 
 static void spin_unlock(spinlock_t *lk) {
@@ -145,17 +144,36 @@ static void spin_unlock(spinlock_t *lk) {
 	Log("Unlocked: %s", lk->nam);
 #endif
 	lk->locked = 0;
-	locked = 0;
+	_intr_write(1);
 }
 
 static void sem_init(sem_t *sem, const char *name, int value) {
-	//TODO
+	sem->count = value;
+	sem->nam = name;
+	sem->sleep_id = -1;
 }
 
 static void sem_wait(sem_t *sem) {
-	//TODO
+	sem->count--;
+	if (sem->count < 0)
+	{
+		if (current_id == -1)
+		{
+			perror("Error! No process is running.");
+			_halt(1);
+		}
+		sem->sleep_id = current_id;
+		tlist[current_id].free = 1;
+		_yield();
+	}
 }
 
 static void sem_signal(sem_t *sem) {
-	//TODO
+	sem->count++;
+	if (sem->sleep_id > -1)
+	{
+		tlist[sem->sleep_id].free = 0;
+		current_id = sem->sleep_id;
+		_yield();
+	}
 }
