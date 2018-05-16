@@ -12,7 +12,6 @@ static void sem_init(sem_t *sem, const char *name, int value);
 static void sem_wait(sem_t *sem);
 static void sem_signal(sem_t *sem);
 static int current_id;
-static int pid_num;
 static int tlist_len;
 
 MOD_DEF(kmt) {
@@ -30,7 +29,6 @@ MOD_DEF(kmt) {
 
 static void kmt_init() {
 	tlist_len = 0;
-	pid_num = 0;
 	current_id = -1;
 }
 
@@ -62,38 +60,21 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	thread->kstack = Kstack.start;
 	tlist[nthread].regset = _make(Kstack, entry, arg);
 	thread->regset = tlist[nthread].regset;
-	tlist[nthread].pid = pid_num;
-	thread->pid = tlist[nthread].pid;
-	pid_num++;
+	tlist[nthread].pid = nthread;
+	thread->pid = nthread;
 	current_id = nthread;
 	if (_intr_read())
 		((void(*)(void *))entry)(arg);
 	return tlist[nthread].pid;
 }
 
-static void kmt_teardown(thread_t *thread) {	
-	int found = 0;
-	for (int i = 0; i < tlist_len; i++)
-		if (tlist[i].pid == thread->pid)
-		{
-			tlist[i].free = 1;
-			found = 1;
-			if (current_id == i)
-			{
-				for (int j = 0; j < tlist_len; j++)
-					if (!tlist[j].free)
-						current_id = j;
-			}
-		}
-	if (!found)
-	{
-		perror("This thread is not included in thread list!\n");
-	}
+static void kmt_teardown(thread_t *thread) {
+	tlist[thread->pid].free = 1;
 }
 
 static thread_t *kmt_schedule() {
 	Log("kmt_schedule triggered.");
-	thread_t *p;
+	/*thread_t *p;
 	p = &tlist[current_id];
 	int next_id = -1;
 	for (int i = current_id + 1; i < tlist_len; i++)
@@ -118,8 +99,62 @@ static thread_t *kmt_schedule() {
 		perror("Serious problem happened.");
 		_halt(1);
 		return NULL;
+	}*/
+	int next_id;
+	if (current_id = -1)
+	{
+		for (int i = 0; i < tlist_len; i++)
+			if (tlist[i].free == 0)
+			{
+				current_id = i;
+				break;
+			}
+		if (current_id == -1)
+		{
+			perror("No process avaliable now!");
+			return NULL;
+		}
+		thread_t *p = &tlist[current_id];
+		return p;
 	}
-	
+	else
+	{
+		next_id = -1;
+		for (int i = current_id + 1; i < tlist_len; i++)
+			if (tlist[i].free == 0)
+			{
+				next_id = i;
+				break;
+			}
+		if (next_id != -1)
+		{
+			current_id = next_id;
+			thread_t *p = &tlist[next_id];
+			return p;
+		}
+		for (int i = 0; i < current_id; i++)
+			if (tlist[i].free == 0)
+			{
+				next_id = i;
+				break;
+			}
+		if (next_id != -1)
+		{
+			current_id = next_id;
+			thread_t *p = &tlist[next_id];
+			return p;
+		}
+		if (tlist[current_id].free == 1)
+		{
+			thread_t *p = &tlist[current_id];
+			return p;
+		}
+		else
+		{
+			perror("No thread avaliable now.");
+			return NULL;
+		}
+	}
 	perror("Warning! Should not reach here.");
 	while (1);
 	return NULL;
