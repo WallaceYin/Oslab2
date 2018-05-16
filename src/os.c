@@ -76,7 +76,7 @@ sem_t empty, fill;
 static void producer(void *arg) {
 	while (1) {
 		kmt->sem_wait(&empty);
-		_putc("[");
+		_putc('[');
 		kmt->signal(&fill);
 	}
 }
@@ -84,15 +84,15 @@ static void producer(void *arg) {
 static void consumer(void *arg) {
 	while (1) {
 		kmt->sem_wait(&fill);
-		_putc("]");
+		_putc(']');
 		kmt->sem_signal(&empty);
 	}
 }
 
 thread_t t1, t2;
 static void test_run() {
-	kmt->sem_init(empty, "empty", 3);
-	kmt->sem_init(fill, "fill", 0);
+	kmt->sem_init(&empty, "empty", 3);
+	kmt->sem_init(&fill, "fill", 0);
 	kmt->create(t1, producer, NULL);
 	kmt->create(t2, producer, NULL);
 }
