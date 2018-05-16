@@ -1,5 +1,6 @@
 #include <os.h>
 #include <debug.h>
+#include <ylib.h>
 
 static void os_init();
 static void os_run();
