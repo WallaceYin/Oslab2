@@ -57,7 +57,7 @@ static void f(void *arg) {
 	while (1) {
 		_putc(*(char *)arg);
 	}
-	kmt->spin_unlock(lk);
+	kmt->spin_unlock(&lk);
 	//_putc(*(char *)arg);
 }
 
