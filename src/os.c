@@ -4,6 +4,7 @@
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
+static last_id;
 
 MOD_DEF(os) {
   .init = os_init,
@@ -12,6 +13,7 @@ MOD_DEF(os) {
 };
 
 static void os_init() {
+	last_id = -1;
 	printf("Hello, OS World!\n");
 }
 
@@ -25,6 +27,8 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
+	if (last_id != -1)
+		tlist[last_id].regset = regs;
 	thread_t *p = kmt->schedule();
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
@@ -51,14 +55,9 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 }
 
 static void f(void *arg) {
-	spinlock_t lk;
-	kmt->spin_init(&lk, "Spinlock test");
-	kmt->spin_lock(&lk);
 	while (1) {
 		_putc(*(char *)arg);
 	}
-	kmt->spin_unlock(&lk);
-	//_putc(*(char *)arg);
 }
 
 static void test_run(void) {

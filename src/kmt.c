@@ -174,6 +174,7 @@ static void sem_signal(sem_t *sem) {
 	{
 		tlist[sem->sleep_id].free = 0;
 		current_id = sem->sleep_id;
+		sem->sleep_id = -1;
 		_yield();
 	}
 }
