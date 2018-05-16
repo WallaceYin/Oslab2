@@ -29,7 +29,10 @@ static void os_run() {
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	if (last_id != -1)
-		tlist[last_id].regset = regs;
+	{
+		//tlist[last_id].regset = regs;
+		memcpy(tlist[last_id].regset, (const void *)regs, REGSET_SIZE);
+	}
 	thread_t *p = kmt->schedule();
 	last_id = p->pid;
 	switch (ev.event) {
