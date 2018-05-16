@@ -75,7 +75,7 @@ static void kmt_teardown(thread_t *thread) {
 static thread_t *kmt_schedule() {
 #ifdef DEBUG
 	Log("kmt_schedule triggered.");
-#ifdef DEBUG
+#endif
 	int next_id;
 	if (current_id == -1)
 	{
