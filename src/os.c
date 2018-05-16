@@ -4,7 +4,7 @@
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
-static last_id;
+static int last_id;
 
 MOD_DEF(os) {
   .init = os_init,
