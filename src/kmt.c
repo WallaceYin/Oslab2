@@ -101,7 +101,7 @@ static thread_t *kmt_schedule() {
 		return NULL;
 	}*/
 	int next_id;
-	if (current_id = -1)
+	if (current_id == -1)
 	{
 		for (int i = 0; i < tlist_len; i++)
 			if (tlist[i].free == 0)

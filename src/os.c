@@ -30,6 +30,9 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 	if (last_id != -1)
 		tlist[last_id].regset = regs;
 	thread_t *p = kmt->schedule();
+	last_id = p->pid;
+	for (int i = 0; i < MAX_THREAD; i++)
+		
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
