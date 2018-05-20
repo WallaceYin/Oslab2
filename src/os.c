@@ -1,7 +1,7 @@
 #include <os.h>
 #include <debug.h>
 #include <ylib.h>
-#define TEST
+//#define TEST
 
 static void os_init();
 static void os_run();

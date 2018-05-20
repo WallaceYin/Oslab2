@@ -21,6 +21,7 @@ struct thread {
 };
 typedef	struct thread thread_t;
 thread_t tlist[MAX_THREAD];
+// WARNING: It is possible that if you define DEBUG in debug.h, you process stack overflowed, due to the fact that Log would cost much of your stack area.
 
 struct spinlock {
 	const char *nam;
