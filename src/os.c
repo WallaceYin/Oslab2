@@ -18,8 +18,9 @@ static void os_init() {
 	last_id = -1;
 	printf("Hello, OS World!\n");
 }
-
+#ifdef TEST
 static void test_run();
+#endif
 static void os_run() {
 #ifdef TEST
 	test_run();
