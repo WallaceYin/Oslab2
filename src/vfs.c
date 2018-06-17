@@ -88,6 +88,8 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	fs->Filemap[num_file].inode.num_block = 0;
 	fs->Filemap[num_file].inode.id = num_file;
 	fs->Filemap[num_file].inode.flags = flags;
+	for (int i = 0; i < MAX_BLOCK; i++)
+		fs->Filemap[num_file].inode.block[i] = NULL;
 	fs->num_file++;
 }
 
@@ -109,7 +111,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 				srand(0);
 				int dex= rand();
 				char s[10];
-				itoa(dec, s);
+				itoa(dex, s);
 				memcpy(buf, s, strlen(s));
 				return strlen(s);
 		}
@@ -161,11 +163,68 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 
 static ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
 	if (last_id == -1)
+	{
+		perror("Error happened in process schedule.");
 		return -1;
+	}
 	file_t *File = tlist[last_id].fdlist[fd];
+
 	if (nbyte <= 0)
 		return -1;
-	//TODO: pretty complex!
+	if (File->fd == -1)
+		return -1;
+
+	if (strcmp(File->mount->root, "/dev") == 0)
+		return 0;
+	
+	else if (File->inode->flags & WR_ONLY == 0)
+		return -1;
+	
+	int blks = num_block;
+	while (blks < (nbyte + File->offset) / PIECE_SIZE + 1)
+	{
+		File->inode->block[blks] = (void *)pmm->alloc(PIECE_SIZE);
+		blks ++;
+	}
+	File->inode->num_block = blks;
+	File->size += nbyte;
+	int l_blk = File->offset / PIECE_SIZE;
+	int r_blk = (File->offset + nbyte) / PIECE_SIZE;
+	//void *dest = File->inode->block[l_blk] + File->offset % PIECE_SIZE;
+	void *dest = NULL;
+	void *src = NULL;
+	int len = 0;
+	int u_len = 0;
+	for (int i = l_blk; i <= r_blk; i++)
+	{
+		if (l_blk == r_blk)
+		{
+			dest = File->inode->block[l_blk] + File->offset % PIECE_SIZE;
+			src = buf;
+			len = nbyte;
+		}
+		else if (i == l_blk)
+		{
+			dest = File->inode->block[l_blk] + File->offset % PIECE_SIZE;
+			src = buf;
+			len = PIECE_SIZE - File->offset % PIECE_SIZE;
+		}
+		else if (i == r_blk)
+		{
+			dest = File->inode->block[r_blk];
+			src = buf + u_len;
+			len = nbyte - u_len;
+		}
+		else
+		{
+			dest = File->inode->block[i];
+			src = buf + u_len;
+			len = PIECE_SIZE;
+		}
+		memcpy(dest, src, len);
+		u_len += len;
+	}
+	return nbyte;
 }
 
 static off_t vfs_lseek(int fd, off_t offset, int whence) {

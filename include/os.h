@@ -10,6 +10,7 @@
 #define MAX_BLOCK 4
 #define MAX_FILE 64
 #define MAX_FD 16
+#define PATH_LEN 20
 
 static inline void puts(const char *p) {
   for (; *p; p++) {
@@ -58,12 +59,9 @@ filesystem_t *procfs;
 filesystem_t *devfs;
 filesystem_t *kvfs;
 
-#define RD_ONLY 1
-#define WR_ONLY 2
-#define RDWR 3
-#define SEEK_SET 0
-#define SEEK_END 1
-#define SEEK_CUR 2
+#define O_RDONLY 1
+#define O_WRONLY 2
+#define O_RDWR 3
 
 struct inode {
 	int id; // inode_id
