@@ -68,7 +68,15 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	
 	for (int i = 0; i < MAX_FD; i++)
 		tlist[nthread].fdlist[i].fd = -1;
-	//TODO create file /proc/[pid]/status
+	
+	char pidstr[5];
+	memset(pidstr, 0, 5);
+	itoa(pid, pidstr);
+	char path[20];
+	memset(path, 0, 20);
+	strcpy(path, "/proc/");
+	strcat(path, pidstr);
+	vfs->create(procfs, path, O_RDONLY);
 	return tlist[nthread].pid;
 }
 
