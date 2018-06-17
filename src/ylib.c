@@ -53,6 +53,50 @@ char *strcat(char *dest, const char *src)
 	return dest;
 }
 
+char *strstr(const char *str1, const char *str2)
+{
+	char *cp = (char *)str1;
+	char *s1, *s2;
+
+	if (!*str2)
+		return (char *)str1;
+	while (*cp)
+	{
+		s1 = cp;
+		s2 = (char *)str2;
+
+		while (*s1 & *s2 & !(*s1 - *s2))
+		{
+			s1++;
+			s2++;
+		}
+
+		if (!*s2)
+			return cp;
+		cp++;
+	}
+	return NULL;
+}
+
+void itoa(int dex, char *dest)
+{
+	int n = dex;
+	int d[10];
+	int i = 0;
+	while (n >= 10)
+	{
+		d[i] = n % 10;
+		n = n / 10;
+		i ++;
+	}
+	while (i > 0)
+	{
+		i--;
+		*dest = (char )(d[i] + (int)'0');
+		dest ++;
+	}
+}
+
 static char str_out[1024];
 int printf(const char *fmt, ...)
 {

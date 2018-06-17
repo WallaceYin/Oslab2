@@ -6,7 +6,7 @@
 static void os_init();
 static void os_run();
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs);
-static int last_id;
+//static int last_id;
 
 MOD_DEF(os) {
   .init = os_init,
@@ -30,17 +30,16 @@ static void os_run() {
 }
 
 static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
-	if (last_id != -1)
-	{
-		memcpy(tlist[last_id].regset, (const void *)regs, REGSET_SIZE);
-	}
-	thread_t *p = kmt->schedule();
-	last_id = p->pid;
 	switch (ev.event) {
 		case _EVENT_IRQ_TIMER:
 #ifdef DEBUG
 			Log("Irq_timer called.");
 #endif
+			if (last_id != -1)
+				memcpy(tlist[last_id].regset, (const void *)regs, REGSET_SIZE);
+			thread_t *p = kmt->schedule();
+			last_id = p->pid;
+			return p->regset;
 			break;
 
 		case _EVENT_IRQ_IODEV:
@@ -57,7 +56,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 			break;
 	}
 
-	return p->regset;
+	return NULL;
 }
 
 #ifdef TEST

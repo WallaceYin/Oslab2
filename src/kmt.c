@@ -65,6 +65,10 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	tlist[nthread].pid = nthread;
 	thread->pid = nthread;
 	current_id = nthread;
+	
+	for (int i = 0; i < MAX_FD; i++)
+		tlist[nthread].fdlist[i].fd = -1;
+	//TODO create file /proc/[pid]/status
 	return tlist[nthread].pid;
 }
 
