@@ -27,6 +27,21 @@ struct inode {
 };
 typedef struct inode inode_t;
 
+struct filemap {
+	char path[PATH_LEN];
+	inode_t inode;
+};
+typedef struct filemap filemap_t;
+
+struct filesystem {
+	char root[10];
+	int num_file;
+	filemap_t Filemap[MAX_FILE];
+}
+typedef struct filesystem filesystem_t;
+filesystem_t *procfs;
+filesystem_t *devfs;
+filesystem_t *kvfs;
 
 struct thread {
 	_RegSet *regset;
@@ -53,34 +68,9 @@ struct semaphore {
 };
 typedef struct semaphore sem_t;
 
-struct filemap {
-	char path[PATH_LEN];
-	inode_t inode;
-};
-typedef struct filemap filemap_t;
-
-struct filesystem {
-	char root[10];
-	int num_file;
-	filemap_t Filemap[MAX_FILE];
-};
-typedef struct filesystem filesystem_t;
-filesystem_t *procfs;
-filesystem_t *devfs;
-filesystem_t *kvfs;
-
 #define O_RDONLY 1
 #define O_WRONLY 2
 #define O_RDWR 3
-
-/*struct inode {
-	int id; // inode_id
-	size_t size; // file size
-	int flags; // RO WO or WR
-	int num_block; // number of blocks
-	void *block[MAX_BLOCK]; // nodes for blocks
-};
-typedef struct inode inode_t;*/
 
 struct file {
 	int fd; // file descripter
