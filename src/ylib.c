@@ -53,6 +53,11 @@ char *strcat(char *dest, const char *src)
 	return dest;
 }
 
+char *strcut(char *src, int n)
+{
+	return (src + n);
+}
+
 char *strstr(const char *str1, const char *str2)
 {
 	char *cp = (char *)str1;

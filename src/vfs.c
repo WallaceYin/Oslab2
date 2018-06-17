@@ -25,6 +25,9 @@ MOD_DEF(vfs) {
 	.close = vfs_close,
 };
 
+const char cpuinfo[] = "cpu family : 6\nmodel : 142\nmodel name : Intel(R) Core(TM) i5-7300U CPU @ 2.60GHz\n";
+const char meminfo[] = "_heap = [00500000, 08000000)\n";
+
 static void vfs_init() {
 	procfs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
 	devfs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
@@ -33,12 +36,12 @@ static void vfs_init() {
 	vfs->mount("/dev", devfs);
 	vfs->mount("/", kvfs);
 	
-	vfs->create(procfs, "/cpuinfo", O_RDONLY);
-	vfs->create(procfs, "/meminfo", O_RDONLY);
-	vfs->create(devfs, "/null", O_RDWR);
-	vfs->create(devfs, "/zero", O_RDWR);
-	vfs->create(devfs, "/random", O_RDWR);
-	//TODO
+	vfs->create(procfs, "/proc/cpuinfo", O_RDONLY);
+	vfs->create(procfs, "/proc/meminfo", O_RDONLY);
+	vfs->create(devfs, "/dev/null", O_RDWR);
+	vfs->create(devfs, "/dev/zero", O_RDWR);
+	vfs->create(devfs, "/dev/random", O_RDWR);
+	
 }
 
 static int vfs_access(const char *path, int mode) {
@@ -58,11 +61,11 @@ static int vfs_unmount(const char *path) {
 
 static int vfs_open(const char *path, int flags) {
 	filesystem_t *fs = NULL;
-	if (strstr(path, "/proc") == 0)
+	if (strstr(path, "/proc") != NULL)
 		fs = procfs;
-	else if (strstr(path, "/dev") == 0)
+	else if (strstr(path, "/dev") != NULL)
 		fs = devfs;
-	else if (strstr(path, "/") == 0)
+	else if (strstr(path, "/") != NULL)
 		fs = kvfs;
 	if (fs == NULL)
 		return -1;
@@ -91,6 +94,29 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	fs->Filemap[fs->num_file].inode.flags = flags;
 	for (int i = 0; i < MAX_BLOCK; i++)
 		fs->Filemap[fs->num_file].inode.block[i] = NULL;
+	if (strcmp("/proc/cpuinfo", path) == 0)
+	{
+		fs->Filemap[fs->num_file].inode.num_block = 1;
+		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
+		memcpy(fs->Filemap[fs->num_file].inode.block[0], cpuinfo, strlen(cpuinfo));
+	}
+	else if (strcmp("/proc/meminfo", path) == 0)
+	{
+		fs->Filemap[fs->num_file].inode.num_block = 1;
+		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
+		memcpy(fs->Filemap[fs->num_file].inode.block[0], meminfo, strlen(meminfo));
+	}
+	else if (strstr(path, "/proc") != NULL)
+	{
+		fs->Filemap[fs->num_file].inode.num_block = 1;
+		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
+		char *pidstr = strcut(path, strlen("/proc/"));
+		char pidinfo[50];
+		strcpy(pidinfo, "Pid: ");
+		strcat(pidinfo, pidstr);
+		strcat(pidinfo, "\nStatus: Running\n");
+		memcpy(fs->Filemap[fs->num_file].inode.block[0],pidinfo, strlen(pidinfo));
+	}
 	fs->num_file++;
 }
 

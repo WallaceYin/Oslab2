@@ -79,12 +79,4 @@ typedef struct semaphore sem_t;
 #define O_WRONLY 2
 #define O_RDWR 3
 
-/*struct file {
-	int fd; // file descripter
-	filesystem_t *mount;
-	off_t offset; // offset
-	inode_t *inode; // inode of file
-};*/
-//typedef struct file file_t;
-
 #endif
