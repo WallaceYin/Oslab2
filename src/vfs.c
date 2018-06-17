@@ -43,6 +43,7 @@ static void vfs_init() {
 
 static int vfs_access(const char *path, int mode) {
 	//TODO
+	return 1;
 }
 
 static int vfs_mount(const char *path, filesystem_t *fs) {
@@ -84,12 +85,12 @@ static int vfs_open(const char *path, int flags) {
 
 static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	strcpy(fs->Filemap[num_file].path, path);
-	fs->Filemap[num_file].inode.size = 0;
-	fs->Filemap[num_file].inode.num_block = 0;
-	fs->Filemap[num_file].inode.id = num_file;
-	fs->Filemap[num_file].inode.flags = flags;
+	fs->Filemap[fs->num_file].inode.size = 0;
+	fs->Filemap[fs->num_file].inode.num_block = 0;
+	fs->Filemap[fs->num_file].inode.id = num_file;
+	fs->Filemap[fs->num_file].inode.flags = flags;
 	for (int i = 0; i < MAX_BLOCK; i++)
-		fs->Filemap[num_file].inode.block[i] = NULL;
+		fs->Filemap[fs->num_file].inode.block[i] = NULL;
 	fs->num_file++;
 }
 
@@ -117,7 +118,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		}
 	}
 
-	if (File->inode.flags & RD_ONLY == 0)
+	if (File->inode->flags & RD_ONLY == 0)
 		return 0;
 	if (nbyte <= 0)
 		return 0;
