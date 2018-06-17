@@ -118,7 +118,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		}
 	}
 
-	if (File->inode->flags & O_RDONLY == 0)
+	if ((File->inode->flags & O_RDONLY) == 0)
 		return 0;
 	if (nbyte <= 0)
 		return 0;
@@ -179,7 +179,7 @@ static ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
 	if (strcmp(File->mount->root, "/dev") == 0)
 		return 0;
 	
-	else if (File->inode->flags & WR_ONLY == 0)
+	else if ((File->inode->flags & O_WRONLY) == 0)
 		return -1;
 	
 	int blks = File->inode->num_block;
