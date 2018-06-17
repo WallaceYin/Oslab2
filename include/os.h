@@ -18,6 +18,15 @@ static inline void puts(const char *p) {
   }
 }
 
+struct inode {
+	int id;
+	size_t size;
+	int flags;
+	int num_blocks;
+	void *block[MAX_BLOCK];
+}	
+
+
 struct thread {
 	_RegSet *regset;
 	void *kstack;
@@ -63,14 +72,14 @@ filesystem_t *kvfs;
 #define O_WRONLY 2
 #define O_RDWR 3
 
-struct inode {
+/*struct inode {
 	int id; // inode_id
 	size_t size; // file size
 	int flags; // RO WO or WR
 	int num_block; // number of blocks
 	void *block[MAX_BLOCK]; // nodes for blocks
 };
-typedef struct inode inode_t;
+typedef struct inode inode_t;*/
 
 struct file {
 	int fd; // file descripter
