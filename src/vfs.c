@@ -169,7 +169,7 @@ static ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
 		perror("Error happened in process schedule.");
 		return -1;
 	}
-	file_t *File = tlist[last_id].fdlist[fd];
+	file_t *File = &tlist[last_id].fdlist[fd];
 
 	if (nbyte <= 0)
 		return -1;
@@ -230,7 +230,7 @@ static ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
 }
 
 static off_t vfs_lseek(int fd, off_t offset, int whence) {
-	file_t *File = tlist[last_id].fdlist[fd];
+	file_t *File = &tlist[last_id].fdlist[fd];
 	
 	switch (whence)
 	{
@@ -248,6 +248,6 @@ static off_t vfs_lseek(int fd, off_t offset, int whence) {
 }
 
 static int vfs_close(int fd) {
-	tlist[last_id].fdlist[fd] = -1;
+	tlist[last_id].fdlist[fd].fd = -1;
 	return 0;
 }
