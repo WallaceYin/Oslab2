@@ -87,7 +87,7 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	strcpy(fs->Filemap[fs->num_file].path, path);
 	fs->Filemap[fs->num_file].inode.size = 0;
 	fs->Filemap[fs->num_file].inode.num_block = 0;
-	fs->Filemap[fs->num_file].inode.id = num_file;
+	fs->Filemap[fs->num_file].inode.id = fs->num_file;
 	fs->Filemap[fs->num_file].inode.flags = flags;
 	for (int i = 0; i < MAX_BLOCK; i++)
 		fs->Filemap[fs->num_file].inode.block[i] = NULL;
@@ -118,7 +118,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		}
 	}
 
-	if (File->inode->flags & RD_ONLY == 0)
+	if (File->inode->flags & O_RDONLY == 0)
 		return 0;
 	if (nbyte <= 0)
 		return 0;
@@ -160,6 +160,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		r_len = r_len - len;
 		dest = dest + len;
 	}
+	return nbyte;
 }
 
 static ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
@@ -181,14 +182,14 @@ static ssize_t vfs_write(int fd, void *buf, size_t nbyte) {
 	else if (File->inode->flags & WR_ONLY == 0)
 		return -1;
 	
-	int blks = num_block;
+	int blks = File->inode->num_block;
 	while (blks < (nbyte + File->offset) / PIECE_SIZE + 1)
 	{
 		File->inode->block[blks] = (void *)pmm->alloc(PIECE_SIZE);
 		blks ++;
 	}
 	File->inode->num_block = blks;
-	File->size += nbyte;
+	File->inode->size += nbyte;
 	int l_blk = File->offset / PIECE_SIZE;
 	int r_blk = (File->offset + nbyte) / PIECE_SIZE;
 	//void *dest = File->inode->block[l_blk] + File->offset % PIECE_SIZE;
@@ -237,7 +238,7 @@ static off_t vfs_lseek(int fd, off_t offset, int whence) {
 			File->offset = offset;
 			break;
 		case SEEK_END:
-			File->offset = File->inode.size + offset;
+			File->offset = File->inode->size + offset;
 			break;
 		case SEEK_CUR:
 			File->offset += offset;
