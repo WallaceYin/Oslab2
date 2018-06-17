@@ -43,6 +43,13 @@ filesystem_t *procfs;
 filesystem_t *devfs;
 filesystem_t *kvfs;
 
+struct file {
+	int fd;
+	filesystem_t *mount;
+	off_t offset;
+	inode_t *inode;
+};
+
 struct thread {
 	_RegSet *regset;
 	void *kstack;
@@ -72,12 +79,12 @@ typedef struct semaphore sem_t;
 #define O_WRONLY 2
 #define O_RDWR 3
 
-struct file {
+/*struct file {
 	int fd; // file descripter
 	filesystem_t *mount;
 	off_t offset; // offset
 	inode_t *inode; // inode of file
-};
+};*/
 //typedef struct file file_t;
 
 #endif
