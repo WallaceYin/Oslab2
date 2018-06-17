@@ -25,7 +25,7 @@ struct inode {
 	int num_block;
 	void *block[MAX_BLOCK];
 };
-typedef struct inode inode_t;
+//typedef struct inode inode_t;
 
 struct filemap {
 	char path[PATH_LEN];
@@ -37,8 +37,8 @@ struct filesystem {
 	char root[10];
 	int num_file;
 	filemap_t Filemap[MAX_FILE];
-}
-typedef struct filesystem filesystem_t;
+};
+//typedef struct filesystem filesystem_t;
 filesystem_t *procfs;
 filesystem_t *devfs;
 filesystem_t *kvfs;
@@ -78,6 +78,6 @@ struct file {
 	off_t offset; // offset
 	inode_t *inode; // inode of file
 };
-typedef struct file file_t;
+//typedef struct file file_t;
 
 #endif
