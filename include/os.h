@@ -22,7 +22,7 @@ struct inode {
 	int id;
 	size_t size;
 	int flags;
-	int num_blocks;
+	int num_block;
 	void *block[MAX_BLOCK];
 };
 typedef struct inode inode_t;
