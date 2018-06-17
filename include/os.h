@@ -76,7 +76,7 @@ struct file {
 	int fd; // file descripter
 	filesystem_t *mount;
 	off_t offset; // offset
-	void *inode; // inode of file
+	inode_t *inode; // inode of file
 };
 typedef struct file file_t;
 

@@ -84,7 +84,7 @@ static int vfs_open(const char *path, int flags) {
 }
 
 static void vfs_create(filesystem_t *fs, char *path, int flags) {
-	strcpy(fs->Filemap[num_file].path, path);
+	strcpy(fs->Filemap[fs->num_file].path, path);
 	fs->Filemap[fs->num_file].inode.size = 0;
 	fs->Filemap[fs->num_file].inode.num_block = 0;
 	fs->Filemap[fs->num_file].inode.id = num_file;
