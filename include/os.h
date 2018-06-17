@@ -24,7 +24,8 @@ struct inode {
 	int flags;
 	int num_blocks;
 	void *block[MAX_BLOCK];
-}	
+};
+typedef struct inode inode_t;
 
 
 struct thread {
