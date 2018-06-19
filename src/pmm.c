@@ -48,7 +48,7 @@ static void *pmm_alloc(size_t size) {
 	{
 		return NULL;
 	}
-	Log("New block to be created with size %d", size);
+	//Log("New block to be created with size %d", size);
 	if (block == NULL)
 	{
 		void *p = current;
