@@ -67,7 +67,7 @@ static int vfs_open(const char *path, int flags) {
 		fs = devfs;
 	else if (strstr(path, "/") != NULL)
 		fs = kvfs;
-	Log(fs->path);
+	Log(fs->root);
 	if (fs == NULL)
 	{
 		perror("No filesystem find.\n");
