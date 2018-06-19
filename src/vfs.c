@@ -154,7 +154,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 				return strlen(s);
 		}
 	}
-
+	Log("Reach here");
 	if ((File->inode->flags & O_RDONLY) == 0)
 		return 0;
 	if (nbyte <= 0)
