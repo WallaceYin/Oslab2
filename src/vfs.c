@@ -68,7 +68,10 @@ static int vfs_open(const char *path, int flags) {
 	else if (strstr(path, "/") != NULL)
 		fs = kvfs;
 	if (fs == NULL)
+	{
+		perror("No filesystem find.\n");
 		return -1;
+	}
 	if (last_id == -1)
 		perror("Error happened in process schedule.");
 	for (int i = 0; i < fs->num_file; i++)
