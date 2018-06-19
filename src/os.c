@@ -66,6 +66,8 @@ char s1[30];
 static void print_1(void *arg) {
 	int fd = vfs->open("/proc/cpuinfo", O_RDONLY);
 	memset(s1, 0, 30);
+	if (fd == -1)
+		_putc('c');
 	vfs->read(fd, (void *)s1, 30);
 	_putc('a');
 	for (int i = 0; i < strlen(s1); i++)
