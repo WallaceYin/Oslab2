@@ -98,17 +98,27 @@ void itoa(int dex, char *dest)
 	int n = dex;
 	int d[10];
 	int i = 0;
+	if (n == 0)
+	{
+		*dest = '0';
+		return ;
+	}
 	while (n >= 10)
 	{
 		d[i] = n % 10;
 		n = n / 10;
 		i ++;
 	}
+	if (n > 0)
+	{
+		d[i] = n;
+		i++;
+	}
 	while (i > 0)
 	{
 		i--;
 		*dest = (char )(d[i] + (int)'0');
-		dest ++;
+		dest++;
 	}
 }
 
