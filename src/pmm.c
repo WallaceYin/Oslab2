@@ -52,7 +52,7 @@ static void *pmm_alloc(size_t size) {
 		void *p = current;
 		while (((size_t)p) % align(digit(size + BLOCK_SIZE)) != 0) p++;
 		current = p + align(digit(size + BLOCK_SIZE));
-		//Log("current = %8x and p = %8x", (unsigned)current, (unsigned)p);
+		Log("current = %8x and p = %8x", (unsigned)current, (unsigned)p);
 		block = (struct _Block *)p + size;
 		block->size = align(digit(size + BLOCK_SIZE)) - BLOCK_SIZE;
 		block->start = p;
