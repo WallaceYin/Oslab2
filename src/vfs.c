@@ -99,12 +99,14 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], cpuinfo, strlen(cpuinfo));
+		fs->Filemap[fs->num_file].inode.size = strlen(meminfo);
 	}
 	else if (strcmp("/proc/meminfo", path) == 0)
 	{
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], meminfo, strlen(meminfo));
+		fs->Filemap[fs->num_file].inode.size = strlen(meminfo);
 	}
 	else if (strstr(path, "/proc") != NULL)
 	{
@@ -116,6 +118,7 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 		strcat(pidinfo, pidstr);
 		strcat(pidinfo, "\nStatus: Running\n");
 		memcpy(fs->Filemap[fs->num_file].inode.block[0],pidinfo, strlen(pidinfo));
+		fs->Filemap[fs->num_file].inode.size = strlen(pidinfo);
 	}
 	fs->num_file++;
 }

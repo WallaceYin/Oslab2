@@ -61,28 +61,18 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 }
 
 #ifdef TEST
-sem_t empty, fill;
-static void producer(void *arg) {
-	while (1) {
-		kmt->sem_wait(&empty);
-		_putc('[');
-		kmt->sem_signal(&fill);
-	}
+
+char s[30];
+static void printinfo(void *arg) {
+	int fd = vfs_open("/proc/cpuinfo", O_RDONLY);
+	memset(s, 0, 30);
+	vfs_read(fd, (void *)s, 30);
+	for (int i = 0; i < strlen(s); i++)
+		_putc(s[i]);
 }
 
-static void consumer(void *arg) {
-	while (1) {
-		kmt->sem_wait(&fill);
-		_putc(']');
-		kmt->sem_signal(&empty);
-	}
-}
-
-thread_t t1, t2;
+thread_t t1;
 static void test_run() {
-	kmt->sem_init(&empty, "empty", 3);
-	kmt->sem_init(&fill, "fill", 0);
-	kmt->create(&t1, producer, NULL);
-	kmt->create(&t2, consumer, NULL);
+	kmt->create(&t1, printinfo, NULL);
 }
 #endif
