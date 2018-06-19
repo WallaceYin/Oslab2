@@ -16,7 +16,6 @@ MOD_DEF(os) {
 
 static void os_init() {
 	last_id = -1;
-	vfs->init();
 	printf("Hello, OS World!\n");
 }
 #ifdef TEST
