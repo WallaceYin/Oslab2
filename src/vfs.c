@@ -141,6 +141,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 	Log("Mount path: %s", File->mount->root);
 	if (strcmp(File->mount->root, "/dev") == 0)
 	{
+		Log("Loop");
 		switch (File->inode->id) {
 			case 0: //null
 				return 0;
