@@ -136,9 +136,9 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		perror("Error happened in process schedule.");
 	file_t *File = &tlist[last_id].fdlist[fd];
 	//Log("Reach here");
-	Log("fd: %d", File->fd);
 	if (File->fd == -1)
 		return -1;
+	Log("Reach here");
 	if (strcmp(File->mount->root, "/dev") == 0)
 	{
 		switch (File->inode->id) {
