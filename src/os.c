@@ -71,7 +71,7 @@ static void print_1(void *arg) {
 	for (;;) {}
 }
 
-char s2[50];
+/*char s2[50];
 static void print_2(void *arg) {
 	int fd = vfs->open("/proc/meminfo", O_RDONLY);
 	memset(s2, 0, 50);
@@ -79,7 +79,7 @@ static void print_2(void *arg) {
 	for (int i = 0; i < strlen(s2); i++)
 		_putc(s2[i]);
 	for (;;) {}
-}
+}*/
 thread_t t1, t2;
 static void test_run() {
 	kmt->create(&t1, print_1, NULL);
