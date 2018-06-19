@@ -72,7 +72,7 @@ static int vfs_open(const char *path, int flags) {
 	//Log(fs->root);
 	if (fs == NULL)
 	{
-		perror("No filesystem find.\n");
+		perror("No filesystem find.");
 		return -1;
 	}
 	if (last_id == -1)
