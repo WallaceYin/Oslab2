@@ -58,6 +58,8 @@ static void *pmm_alloc(size_t size) {
 		block->start = p;
 		block->free = 0;
 		block->next = NULL;
+		if (p == NULL)
+			perror("Error here");
 		return p;
 	}
 	else
