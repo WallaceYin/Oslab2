@@ -61,11 +61,11 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
 #ifdef TEST
 
-char s1[50];
+char s1[100];
 static void print_1(void *arg) {
 	int fd = vfs->open("/proc/cpuinfo", O_RDONLY);
-	memset(s1, 0, 50);
-	vfs->read(fd, (void *)s1, 50);
+	memset(s1, 0, 100);
+	vfs->read(fd, (void *)s1, 100);
 	for (int i = 0; i < strlen(s1); i++)
 		_putc(s1[i]);
 	for (;;) {}
