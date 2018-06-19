@@ -82,7 +82,7 @@ static int vfs_open(const char *path, int flags) {
 	for (int i = 0; i < fs->num_file; i++)
 		if (strcmp(fs->Filemap[i].path, path) == 0)
 		{
-			Log("File found.\n");
+			//Log("File found.\n");
 			int j = 0;
 			while (tlist[last_id].fdlist[j].fd != -1)
 				i++;
