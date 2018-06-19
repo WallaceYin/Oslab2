@@ -159,9 +159,9 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		return 0;
 	if (nbyte <= 0)
 		return 0;
-	Log("Reach here");
 	else if (nbyte > File->inode->size)
 		nbyte = File->inode->size;
+	Log("Reach here");
 	if (nbyte + File->offset > File->inode->num_block * PIECE_SIZE)
 		nbyte = File->inode->num_block * PIECE_SIZE - File->offset;
 	int f_block = File->offset / PIECE_SIZE;
