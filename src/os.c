@@ -61,7 +61,7 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
 #ifdef TEST
 
-char s1[100];
+/*char s1[100];
 static void print_1(void *arg) {
 	int fd = vfs->open("/proc/cpuinfo", O_RDONLY);
 	memset(s1, 0, 100);
@@ -69,7 +69,7 @@ static void print_1(void *arg) {
 	for (int i = 0; i < strlen(s1); i++)
 		_putc(s1[i]);
 	for (;;) {}
-}
+}*/
 
 char s2[100];
 static void print_2(void *arg) {
@@ -80,9 +80,9 @@ static void print_2(void *arg) {
 		_putc(s2[i]);
 	for (;;) {}
 }
-thread_t t1, t2;
+thread_t t2;
 static void test_run() {
-	kmt->create(&t1, print_1, NULL);
+	//kmt->create(&t1, print_1, NULL);
 	kmt->create(&t2, print_2, NULL);
 }
 #endif
