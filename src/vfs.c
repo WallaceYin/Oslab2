@@ -32,6 +32,7 @@ static void vfs_init() {
 	procfs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
 	devfs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
 	kvfs = (filesystem_t *)pmm->alloc(sizeof(filesystem_t));
+	Log("%d", sizeof(filesystem_t));
 	if (procfs == NULL || devfs == NULL || kvfs == NULL)
 		perror("Error!");
 	vfs->mount("/proc", procfs);
