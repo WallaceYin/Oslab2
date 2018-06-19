@@ -83,6 +83,6 @@ static void print_2(void *arg) {
 thread_t t1, t2;
 static void test_run() {
 	kmt->create(&t1, print_1, NULL);
-	kmt->create(&t2, print_2, NULL);
+	//kmt->create(&t2, print_2, NULL);
 }
 #endif
