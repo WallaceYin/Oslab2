@@ -83,7 +83,7 @@ static int vfs_open(const char *path, int flags) {
 			//Log("File found.\n");
 			int j = 0;
 			while (tlist[last_id].fdlist[j].fd != -1)
-				i++;
+				j++;
 			tlist[last_id].fdlist[j].fd = j;
 			tlist[last_id].fdlist[j].mount = fs;
 			tlist[last_id].fdlist[j].offset = 0;
@@ -135,7 +135,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 	if (last_id == -1)
 		perror("Error happened in process schedule.");
 	file_t *File = &tlist[last_id].fdlist[fd];
-	Log("Reach here");
+	//Log("Reach here");
 	if (File->fd == -1)
 		return -1;
 	if (strcmp(File->mount->root, "/dev") == 0)
