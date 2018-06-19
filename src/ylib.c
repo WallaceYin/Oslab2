@@ -31,6 +31,8 @@ char *strcpy(char *dest, const char *src)
 int strcmp(const char *str_1, const char *str_2)
 {
 	int i;
+	if (strlen(str_1) != strlen(str_2))
+		return -1;
 	for (i = 0; ; i++)
 	{
 		if (i == strlen(str_1))
