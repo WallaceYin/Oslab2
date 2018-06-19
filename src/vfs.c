@@ -96,7 +96,7 @@ static int vfs_open(const char *path, int flags) {
 }
 
 static void vfs_create(filesystem_t *fs, char *path, int flags) {
-	Log("fs->num_file = %d", fs->num_file);
+	//Log("fs->num_file = %d", fs->num_file);
 	strcpy(fs->Filemap[fs->num_file].path, path);
 	fs->Filemap[fs->num_file].inode.size = 0;
 	fs->Filemap[fs->num_file].inode.num_block = 0;
@@ -114,6 +114,7 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	}
 	else if (strcmp("/proc/meminfo", path) == 0)
 	{
+		Log("Reach this loop");
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], meminfo, strlen(meminfo));
