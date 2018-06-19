@@ -61,6 +61,7 @@ static int vfs_unmount(const char *path) {
 
 static int vfs_open(const char *path, int flags) {
 	filesystem_t *fs = NULL;
+	Log(path);
 	if (strstr(path, "/proc") != NULL)
 		fs = procfs;
 	else if (strstr(path, "/dev") != NULL)
