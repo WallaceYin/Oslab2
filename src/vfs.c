@@ -88,7 +88,6 @@ static int vfs_open(const char *path, int flags) {
 			tlist[last_id].fdlist[j].mount = fs;
 			tlist[last_id].fdlist[j].offset = 0;
 			tlist[last_id].fdlist[j].inode = &fs->Filemap[i].inode;
-			Log("Open success");
 			return j;
 		}
 	Log("No file found.\n");
@@ -156,13 +155,14 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 				return strlen(s);
 		}
 	}
+	Log("Reach herre");
 	if ((File->inode->flags & O_RDONLY) == 0)
 		return 0;
 	if (nbyte <= 0)
 		return 0;
 	else if (nbyte > File->inode->size)
 		nbyte = File->inode->size;
-	Log("Reach here");
+
 	if (nbyte + File->offset > File->inode->num_block * PIECE_SIZE)
 		nbyte = File->inode->num_block * PIECE_SIZE - File->offset;
 	int f_block = File->offset / PIECE_SIZE;
