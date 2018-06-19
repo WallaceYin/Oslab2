@@ -87,6 +87,7 @@ static int vfs_open(const char *path, int flags) {
 			tlist[last_id].fdlist[j].inode = &fs->Filemap[i].inode;
 			return j;
 		}
+	Log("No file found.\n");
 	return -1;
 }
 
