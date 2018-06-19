@@ -88,6 +88,7 @@ static int vfs_open(const char *path, int flags) {
 			tlist[last_id].fdlist[j].mount = fs;
 			tlist[last_id].fdlist[j].offset = 0;
 			tlist[last_id].fdlist[j].inode = &fs->Filemap[i].inode;
+			Log("Open success");
 			return j;
 		}
 	Log("No file found.\n");
