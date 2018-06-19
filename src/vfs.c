@@ -107,7 +107,7 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], cpuinfo, strlen(cpuinfo));
-		fs->Filemap[fs->num_file].inode.size = strlen(meminfo);
+		fs->Filemap[fs->num_file].inode.size = strlen(cpuinfo);
 	}
 	else if (strcmp("/proc/meminfo", path) == 0)
 	{
@@ -159,6 +159,7 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 		return 0;
 	if (nbyte <= 0)
 		return 0;
+	Log("Reach here");
 	else if (nbyte > File->inode->size)
 		nbyte = File->inode->size;
 	if (nbyte + File->offset > File->inode->num_block * PIECE_SIZE)
