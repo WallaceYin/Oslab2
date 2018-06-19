@@ -72,7 +72,6 @@ static int kmt_create(thread_t *thread, void (*entry)(void *arg), void *arg) {
 	char pidstr[5];
 	memset(pidstr, 0, 5);
 	itoa(tlist[nthread].pid, pidstr);
-	Log(pidstr);
 	char path[20];
 	memset(path, 0, 20);
 	strcpy(path, "/proc/");
