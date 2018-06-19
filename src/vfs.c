@@ -77,6 +77,7 @@ static int vfs_open(const char *path, int flags) {
 	}
 	if (last_id == -1)
 		perror("Error happened in process schedule.");
+	Log("open path %s", path);
 	for (int i = 0; i < fs->num_file; i++)
 		if (strcmp(fs->Filemap[i].path, path) == 0)
 		{
