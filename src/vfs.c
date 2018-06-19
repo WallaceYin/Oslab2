@@ -138,9 +138,9 @@ static ssize_t vfs_read(int fd, void *buf, size_t nbyte) {
 	//Log("Reach here");
 	if (File->fd == -1)
 		return -1;
+	Log("Mount path: %s", File->mount->root);
 	if (strcmp(File->mount->root, "/dev") == 0)
 	{
-		Log("In this loop");
 		switch (File->inode->id) {
 			case 0: //null
 				return 0;
