@@ -65,10 +65,9 @@ char s1[30];
 static void print_1(void *arg) {
 	int fd = vfs->open("/proc/cpuinfo", O_RDONLY);
 	memset(s1, 0, 30);
-	if (fd == -1)
-		_putc('c');
 	vfs->read(fd, (void *)s1, 30);
-	_putc('a');
+	for (int i = 0; i < strlen(s1); i++)
+		_putc('a');
 	for (int i = 0; i < strlen(s1); i++)
 		_putc(s1[i]);
 	for (;;) {}
@@ -79,7 +78,8 @@ static void print_2(void *arg) {
 	int fd = vfs->open("/proc/meminfo", O_RDONLY);
 	memset(s2, 0, 30);
 	vfs->read(fd, (void *)s2, 30);
-	_putc('b');
+	for (int i = 0; i < strlen(s1); i++)
+		_putc('b');
 	for (int i = 0; i < strlen(s2); i++)
 		_putc(s2[i]);
 	for (;;) {}
