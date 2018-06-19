@@ -88,7 +88,7 @@ char *strstr(const char *str1, const char *str2)
 	for (int i = 0; i < len; i++)
 		if (str1[i] != str2[i])
 			return NULL;
-	return str1;
+	return (char *)str1;
 }
 
 void itoa(int dex, char *dest)
