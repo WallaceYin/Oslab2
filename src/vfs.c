@@ -50,6 +50,7 @@ static int vfs_access(const char *path, int mode) {
 }
 
 static int vfs_mount(const char *path, filesystem_t *fs) {
+	memset(fs->root, 0, PATH_LEN);
 	strcpy(fs->root, path);
 	fs->num_file = 0;
 	return 0;
