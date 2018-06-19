@@ -77,7 +77,7 @@ static int vfs_open(const char *path, int flags) {
 	}
 	if (last_id == -1)
 		perror("Error happened in process schedule.");
-	Log("open path %s", path);
+	//Log("open path %s", path);
 	for (int i = 0; i < fs->num_file; i++)
 		if (strcmp(fs->Filemap[i].path, path) == 0)
 		{
@@ -107,7 +107,6 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 		fs->Filemap[fs->num_file].inode.block[i] = NULL;
 	if (strcmp("/proc/cpuinfo", path) == 0)
 	{
-		Log("Why?");
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], cpuinfo, strlen(cpuinfo));
@@ -115,7 +114,6 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	}
 	else if (strcmp("/proc/meminfo", path) == 0)
 	{
-		Log("Reach this loop");
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], meminfo, strlen(meminfo));
