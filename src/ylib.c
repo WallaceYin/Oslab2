@@ -60,7 +60,7 @@ char *strcut(char *src, int n)
 
 char *strstr(const char *str1, const char *str2)
 {
-	char *cp = (char *)str1;
+	/*char *cp = (char *)str1;
 	char *s1, *s2;
 
 	if (!*str2)
@@ -79,8 +79,16 @@ char *strstr(const char *str1, const char *str2)
 		if (!*s2)
 			return cp;
 		cp++;
-	}
-	return NULL;
+	}*/
+	int len;
+	if (strlen(str1) > strlen(str2))
+		len = strlen(str2);
+	else
+		len = strlen(str1);
+	for (int i = 0; i < len; i++)
+		if (str1[i] != str2[i])
+			return NULL;
+	return str1;
 }
 
 void itoa(int dex, char *dest)
