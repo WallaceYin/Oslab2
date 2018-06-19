@@ -64,9 +64,9 @@ static _RegSet *os_interrupt(_Event ev, _RegSet *regs) {
 
 char s[30];
 static void printinfo(void *arg) {
-	int fd = vfs_open("/proc/cpuinfo", O_RDONLY);
+	int fd = vfs->open("/proc/cpuinfo", O_RDONLY);
 	memset(s, 0, 30);
-	vfs_read(fd, (void *)s, 30);
+	vfs->read(fd, (void *)s, 30);
 	for (int i = 0; i < strlen(s); i++)
 		_putc(s[i]);
 }
