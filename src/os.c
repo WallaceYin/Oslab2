@@ -86,7 +86,7 @@ static void print_3(void *arg) {
 	int fd = vfs->open("/proc/0", O_RDONLY);
 	memset(s3, 0, 100);
 	vfs->read(fd, (void *)s3, 100);
-	for (int i = 0 i < strlen(s3); i++)
+	for (int i = 0; i < strlen(s3); i++)
 		_putc(s3[i]);
 	for (;;) {}
 }
