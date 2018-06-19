@@ -26,6 +26,7 @@ static void pmm_init() {
 	current = _heap.start;
 	if (current == NULL)
 		perror("Danger!");
+	Log("Inited\n");
 	block = NULL;
 }
 
