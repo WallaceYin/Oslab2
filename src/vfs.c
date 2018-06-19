@@ -69,10 +69,10 @@ static int vfs_open(const char *path, int flags) {
 		fs = devfs;
 	else if (strstr(path, "/") != NULL)
 		fs = kvfs;
-	Log(fs->root);
+	//Log(fs->root);
 	if (fs == NULL)
 	{
-		//perror("No filesystem find.\n");
+		perror("No filesystem find.\n");
 		return -1;
 	}
 	if (last_id == -1)
