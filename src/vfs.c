@@ -100,11 +100,11 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	fs->Filemap[fs->num_file].inode.num_block = 0;
 	fs->Filemap[fs->num_file].inode.id = fs->num_file;
 	fs->Filemap[fs->num_file].inode.flags = flags;
+	Log("Path = %s", path);
 	for (int i = 0; i < MAX_BLOCK; i++)
 		fs->Filemap[fs->num_file].inode.block[i] = NULL;
 	if (strcmp("/proc/cpuinfo", path) == 0)
 	{
-		Log("Reach here");
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], cpuinfo, strlen(cpuinfo));
@@ -112,7 +112,6 @@ static void vfs_create(filesystem_t *fs, char *path, int flags) {
 	}
 	else if (strcmp("/proc/meminfo", path) == 0)
 	{
-		//Log("Rech here");
 		fs->Filemap[fs->num_file].inode.num_block = 1;
 		fs->Filemap[fs->num_file].inode.block[0] = (void *)pmm->alloc(PIECE_SIZE);
 		memcpy(fs->Filemap[fs->num_file].inode.block[0], meminfo, strlen(meminfo));
