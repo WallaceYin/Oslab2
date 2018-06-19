@@ -40,7 +40,7 @@ int strcmp(const char *str_1, const char *str_2)
 		if (i == strlen(str_2))
 			break;
 
-		if (!( str_2[i] - str_1[i]))
+		if (((int)str_2[i] - (int)str_1[i]) != 0)
 			return str_2[i] - str_1[i];
 	}
 	return 0;
