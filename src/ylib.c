@@ -62,7 +62,10 @@ char *strstr(const char *str1, const char *str2)
 {
 	char *cp = (char *)str1;
 	char *s1, *s2;
-
+	Log("In strstr:");
+	Log(str1);
+	Log(str2);
+	Log("End");
 	if (!*str2)
 		return (char *)str1;
 	while (*cp)
@@ -80,6 +83,7 @@ char *strstr(const char *str1, const char *str2)
 			return cp;
 		cp++;
 	}
+	Log("No match");
 	return NULL;
 }
 
